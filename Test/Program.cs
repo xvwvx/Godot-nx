@@ -6,8 +6,7 @@ namespace Test
     {
         public static void Main(string[] args)
         {
-            var filename = "/Volumes/data/workspaces/Game/nxengine-evo/nxengine-evo/bin/data/sprites.sif";
-            new SIFLoader(filename);
+            new SIFLoader(args[0]);
         }
     }
 }
