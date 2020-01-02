@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="addons\SIF\SIFIndexEntry.cs" />
     <Compile Include="addons\SIF\SIFLoader.cs" />
-    <Compile Include="Arms\Weapon\Weapon.cs" />
+    <Compile Include="Arms\Weapon.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Metal\AI\FSM\State.cs" />
     <Compile Include="Metal\AI\FSM\StateMachine.cs" />

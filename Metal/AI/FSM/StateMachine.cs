@@ -1,7 +1,7 @@
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Godot;
 
 namespace Metal.AI.FSM
 {
@@ -37,6 +37,33 @@ namespace Metal.AI.FSM
         {
             state.OnExit();
             RemoveChild(state);
+        }
+
+        public void AddState(State<T> state)
+        {
+            _states[state.Name] = state;
+        }
+
+        public void RemoveState(State<T> state)
+        {
+            _states.Remove(state.Name);
+        }
+
+        public StateType AddState<StateType>() where StateType : State<T>
+        {
+            var state = Activator.CreateInstance<StateType>();
+            _states[state.Name] = state;
+            return state;
+        }
+
+        public void RemoveState<StateType>() where StateType : State<T>
+        {
+            _states.Remove(typeof(StateType).Name);
+        }
+
+        public StateType GetState<StateType>() where StateType : State<T>
+        {
+            return (StateType) _states[typeof(StateType).Name];
         }
 
         public void SetState(string key)

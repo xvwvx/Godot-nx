@@ -3,9 +3,18 @@ using Metal.AI.FSM;
 
 namespace NX
 {
+    enum Direction : uint
+    {
+        None = 0x0000,
+        Right = 0x0001,
+        Left = 0x0002,
+        Up = 0x0004,
+        Down = 0x0008
+    }
+
     public partial class Player
     {
-        class BaseState : State<Player>
+        private class BaseState : State<Player>
         {
             protected Vector2 GetDir()
             {
@@ -35,12 +44,12 @@ namespace NX
             }
         }
 
-        class Stand : BaseState
+        private class Stand : BaseState
         {
             public override void OnEnter()
             {
                 base.OnEnter();
-                Owner._animationPlayer.Play("Jump");
+                Owner._animationPlayer.Play("Stand");
             }
 
             public override void _Process(float delta)
@@ -54,14 +63,23 @@ namespace NX
                     Owner.Scale = scale;
                     Owner._machine.SetState(typeof(Walk).Name);
                 }
-                else if (dir.x < 0)
+
+                if (dir.y == 0)
+                {
+                    Owner._animationPlayer.Play("Stand");
+                }
+                else if (dir.y < 0)
                 {
                     Owner._animationPlayer.Play("StandUp");
+                }
+                else
+                {
+                    Owner._animationPlayer.Play("StandDown");
                 }
             }
         }
 
-        class Walk : BaseState
+        private class Walk : BaseState
         {
             public override void OnEnter()
             {
@@ -69,14 +87,37 @@ namespace NX
                 var dir = GetDir();
                 Owner._animationPlayer.Play("Walk");
             }
+
+            public override void _Process(float delta)
+            {
+                base._Process(delta);
+
+                var dir = GetDir();
+                if (dir.x == 0)
+                {
+                    Owner._machine.SetState(typeof(Stand).Name);
+                }
+            }
         }
 
-        class Jump : BaseState
+        private class Jump : BaseState
         {
+            public override void _Process(float delta)
+            {
+                base._Process(delta);
+
+                var dir = GetDir();
+            }
         }
 
-        class Fall : BaseState
+        private class Fall : BaseState
         {
+            public override void _Process(float delta)
+            {
+                base._Process(delta);
+
+                var dir = GetDir();
+            }
         }
     }
 }

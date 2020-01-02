@@ -1,6 +1,6 @@
 using Godot;
 using Metal.AI.FSM;
-using NX.Arms.Weapon;
+using NX.Arms;
 
 namespace NX
 {
