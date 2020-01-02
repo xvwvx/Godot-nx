@@ -62,6 +62,7 @@ namespace NX
                     scale.x = Mathf.Abs(scale.x) * dir.x;
                     Owner.Scale = scale;
                     Owner._machine.SetState(typeof(Walk).Name);
+                    return;
                 }
 
                 if (dir.y == 0)

@@ -39,14 +39,30 @@ namespace Metal.AI.FSM
             RemoveChild(state);
         }
 
+
+        public bool HasState(string key)
+        {
+            return _states[key] != null;
+        }
+
+        public bool HasState<StateType>() where StateType : State<T>
+        {
+            return _states[typeof(StateType).Name] != null;
+        }
+
+        public State<T> AddState(string key)
+        {
+            var assemblyName = typeof(T).Assembly.FullName;
+            var fullName = typeof(T).FullName;
+
+            var state = (State<T>) Activator.CreateInstance(assemblyName, fullName + "." + key).Unwrap();
+            _states[state.Name] = state;
+            return state;
+        }
+
         public void AddState(State<T> state)
         {
             _states[state.Name] = state;
-        }
-
-        public void RemoveState(State<T> state)
-        {
-            _states.Remove(state.Name);
         }
 
         public StateType AddState<StateType>() where StateType : State<T>
@@ -56,9 +72,24 @@ namespace Metal.AI.FSM
             return state;
         }
 
-        public void RemoveState<StateType>() where StateType : State<T>
+        public bool RemoveState(string key)
         {
-            _states.Remove(typeof(StateType).Name);
+            return _states.Remove(key);
+        }
+
+        public bool RemoveState(State<T> state)
+        {
+            return _states.Remove(state.Name);
+        }
+
+        public bool RemoveState<StateType>() where StateType : State<T>
+        {
+            return _states.Remove(typeof(StateType).Name);
+        }
+
+        public StateType GetState<StateType>(string key) where StateType : State<T>
+        {
+            return (StateType) _states[key];
         }
 
         public StateType GetState<StateType>() where StateType : State<T>
